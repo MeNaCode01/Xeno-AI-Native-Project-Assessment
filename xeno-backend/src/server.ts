@@ -1,8 +1,14 @@
+console.log("Starting server...");
+console.log("Initializing Prisma...");
 import "dotenv/config";
 import app from "./app";
 
-const PORT = process.env.PORT || 3000;
+console.log("Registering routes...");
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+const PORT = Number(process.env.PORT) || 3000;
+
+console.log("Listening...");
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server listening on ${PORT}`);
 });
+
