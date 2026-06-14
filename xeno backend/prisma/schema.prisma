@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum CampaignStatus {
+  draft
+  sent
+  completed
+}
+
+enum CommunicationStatus {
+  pending
+  delivered
+  opened
+  clicked
+  converted
+  failed
+}
+
+enum Channel {
+  whatsapp
+  sms
+  email
+  rcs
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  phone     String?
+  city       String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  orders         Order[]
+  communications Communication[]
+
+  @@map("customers")
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+
+  customerId Int @map("customer_id")
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  totalAmount Decimal @db.Decimal(10, 2) @map("total_amount")
+
+  orderDate DateTime @map("order_date")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([customerId])
+  @@index([orderDate])
+
+  @@map("orders")
+}
+
+model Campaign {
+  id Int @id @default(autoincrement())
+
+  title   String
+  goal    String
+  message String
+
+  channel Channel
+
+  audienceFilters Json @map("audience_filters")
+
+  status CampaignStatus @default(draft)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  communications Communication[]
+
+  @@map("campaigns")
+}
+
+model Communication {
+  id Int @id @default(autoincrement())
+
+  campaignId Int @map("campaign_id")
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  customerId Int @map("customer_id")
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  status CommunicationStatus @default(pending)
+
+  sentAt DateTime? @map("sent_at")
+
+  deliveredAt DateTime? @map("delivered_at")
+
+  openedAt DateTime? @map("opened_at")
+
+  clickedAt DateTime? @map("clicked_at")
+
+  convertedAt DateTime? @map("converted_at")
+
+  @@index([campaignId])
+  @@index([customerId])
+  @@index([status])
+
+  @@map("communications")
+}

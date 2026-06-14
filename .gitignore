@@ -1,0 +1,43 @@
+# Dependency directories
+node_modules/
+
+# Build and compilation outputs
+dist/
+dist-ssr/
+build/
+.next/
+out/
+.tmp/
+*.tsbuildinfo
+
+# Database and Generated Prisma client
+generated/prisma/
+*.db
+*.db-journal
+
+# Secrets & environment configurations
+.env
+.env.local
+.env.production
+.env.development
+.env.staging
+
+# Editor configurations and OS files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+
+# Logs and Debug files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
